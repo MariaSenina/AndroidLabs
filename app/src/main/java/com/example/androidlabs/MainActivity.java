@@ -7,9 +7,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,5 +31,16 @@ public class MainActivity extends AppCompatActivity {
             text.setText( edit.getText().toString() );
             Toast.makeText(MainActivity.this, getResources().getString(R.string.toast_message) , Toast.LENGTH_SHORT).show();
             } );
+
+        CheckBox checkBox = findViewById(R.id.checkbox1);
+
+        checkBox.setOnCheckedChangeListener( (cb, isChecked) -> {
+            String message = getResources().getString(R.string.snackbar_message)
+                    + (isChecked ? getResources().getString(R.string.on) : getResources().getString(R.string.off));
+            Snackbar
+                    .make(checkBox, message, Snackbar.LENGTH_LONG)
+                    .setAction( getResources().getString(R.string.undo), click -> cb.setChecked(!isChecked) )
+                    .show();
+        });
     }
 }

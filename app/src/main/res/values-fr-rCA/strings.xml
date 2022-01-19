@@ -7,4 +7,8 @@
     <string name="press_me">Presse-moi</string>
     <string name="checkbox">Regardez ça!</string>
     <string name="toast_message">Le libellé a été mis à jour.</string>
+    <string name="snackbar_message">La case à cocher est\ </string>
+    <string name="on">Activée</string>
+    <string name="off">Désactivée</string>
+    <string name="undo">Annuler</string>
 </resources>
