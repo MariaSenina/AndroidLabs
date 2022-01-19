@@ -1,5 +1,9 @@
 <resources>
-    <string name="app_name">AndroidLabs</string>
+    <string name="app_name" translatable="false">AndroidLabs</string>
     <string name="hello_world">Hello World</string>
     <string name="button_text">I\'m a button!</string>
+    <string name="love_android">I love Android</string>
+    <string name="on_off_switch">Switch on/off</string>
+    <string name="press_me">Press Me</string>
+    <string name="checkbox">Check this out!</string>
 </resources>
