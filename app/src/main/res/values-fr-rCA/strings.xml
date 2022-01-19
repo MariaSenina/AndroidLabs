@@ -6,4 +6,5 @@
     <string name="on_off_switch">Allumer éteindre</string>
     <string name="press_me">Presse-moi</string>
     <string name="checkbox">Regardez ça!</string>
+    <string name="toast_message">Le libellé a été mis à jour.</string>
 </resources>

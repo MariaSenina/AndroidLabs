@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
         EditText edit = findViewById(R.id.edit_text);
         TextView text = findViewById(R.id.text1);
 
-        btn.setOnClickListener( click -> text.setText( edit.getText().toString() ) );
+        btn.setOnClickListener( click -> {
+            text.setText( edit.getText().toString() );
+            Toast.makeText(MainActivity.this, getResources().getString(R.string.toast_message) , Toast.LENGTH_SHORT).show();
+            } );
     }
 }

@@ -6,4 +6,5 @@
     <string name="on_off_switch">Switch on/off</string>
     <string name="press_me">Press Me</string>
     <string name="checkbox">Check this out!</string>
+    <string name="toast_message">Label has been updated.</string>
 </resources>
