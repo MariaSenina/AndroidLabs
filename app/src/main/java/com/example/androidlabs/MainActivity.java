@@ -12,6 +12,7 @@ import android.widget.EditText;
 public class MainActivity extends AppCompatActivity {
     SharedPreferences preferences;
     EditText typeField;
+    Intent nextPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +25,10 @@ public class MainActivity extends AppCompatActivity {
         typeField.setText(savedString);
 
         Button nextButton = findViewById(R.id.nextButton);
-        Intent nextPage = new Intent(this, NameActivity.class);
+        nextPage = new Intent(this, NameActivity.class);
         nextButton.setOnClickListener(click -> {
+            nextPage.putExtra("name", typeField.getText().toString());
             startActivity(nextPage);
-
         });
     }
 

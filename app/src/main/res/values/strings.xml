@@ -13,7 +13,7 @@
     <string name="undo">Undo</string>
     <string name="enter_name">Enter your name</string>
     <string name="next">Next</string>
-    <string name="welcome">Welcome!</string>
+    <string name="welcome">Welcome</string>
     <string name="wrong_name">Don\'t call me that</string>
     <string name="thank_you">Thank you</string>
 </resources>
