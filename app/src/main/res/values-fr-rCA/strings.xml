@@ -11,4 +11,9 @@
     <string name="on">Activée</string>
     <string name="off">Désactivée</string>
     <string name="undo">Annuler</string>
+    <string name="enter_name">Entrez votre nom</string>
+    <string name="next">Suivant</string>
+    <string name="welcome">Bienvenue!</string>
+    <string name="wrong_name">Ne m\'appelle pas comme ça</string>
+    <string name="thank_you">Merci</string>
 </resources>
