@@ -1,5 +1,6 @@
 package com.example.androidlabs;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -10,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
+    int START_NAME_ACTIVITY = 123;
+
     SharedPreferences preferences;
     EditText typeField;
     Intent nextPage;
@@ -28,13 +31,8 @@ public class MainActivity extends AppCompatActivity {
         nextPage = new Intent(this, NameActivity.class);
         nextButton.setOnClickListener(click -> {
             nextPage.putExtra("name", typeField.getText().toString());
-            startActivity(nextPage);
+            startActivityForResult(nextPage, START_NAME_ACTIVITY);
         });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
     }
 
     @Override
@@ -45,18 +43,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+        if(requestCode == START_NAME_ACTIVITY) {
+            if (resultCode == 1) {
+                finish();
+            } else if (resultCode == 0) {
+                typeField.setText("");
+            }
+        }
     }
 
     private void saveSharedPreferences(String stringToSave) {
