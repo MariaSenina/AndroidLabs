@@ -16,4 +16,7 @@
     <string name="welcome">Bienvenue!</string>
     <string name="wrong_name">Ne m\'appelle pas comme ça</string>
     <string name="thank_you">Merci</string>
+    <string name="type_here">Écrivez ici</string>
+    <string name="urgent">Urgente</string>
+    <string name="add">Ajouter</string>
 </resources>
