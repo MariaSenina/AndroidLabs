@@ -1,7 +1,9 @@
 package com.example.androidlabs;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -33,7 +36,23 @@ public class MainActivity extends AppCompatActivity {
         addButton.setOnClickListener(click -> {
             String newEntry = todoEntry.getText().toString();
             items.add(newEntry);
+            todoEntry.setText("");
             adapter.notifyDataSetChanged();
+        });
+
+
+        listView.setOnItemLongClickListener((p, b, pos, id) -> {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle("Do you want to delete this?")
+                    .setMessage("The selected row is " + pos)
+                    .setPositiveButton("Yes", (click, arg) -> {
+                        items.remove(pos);
+                        adapter.notifyDataSetChanged();
+                    })
+                    .setNegativeButton("No", (click, arg) -> {})
+                    .setView(getLayoutInflater().inflate(R.layout.todo_layout, null))
+                    .create().show();
+            return true;
         });
     }
 
