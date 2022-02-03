@@ -18,7 +18,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    ArrayList<String> items = new ArrayList<>();
+    private ArrayList<ToDoItem> items = new ArrayList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,18 +30,22 @@ public class MainActivity extends AppCompatActivity {
         CustomListAdapter adapter = new CustomListAdapter();
         listView.setAdapter(adapter);
 
-        EditText todoEntry = findViewById(R.id.todoEntry);
-
         Button addButton = findViewById(R.id.addButton);
         addButton.setOnClickListener(click -> {
-            String newEntry = todoEntry.getText().toString();
-            items.add(newEntry);
+            Switch urgentSwitch = findViewById(R.id.urgentSwitch);
+            EditText todoEntry = findViewById(R.id.todoEntry);
+            ToDoItem newItem = new ToDoItem(todoEntry.getText().toString(), urgentSwitch.isChecked());
+            items.add(newItem);
             todoEntry.setText("");
+            urgentSwitch.setChecked(false);
             adapter.notifyDataSetChanged();
         });
 
-
         listView.setOnItemLongClickListener((p, b, pos, id) -> {
+            View inflate = getLayoutInflater().inflate(R.layout.todo_layout, null);
+            TextView text = inflate.findViewById(R.id.todoItem);
+            text.setText(items.get(pos).getText());
+
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setTitle(getResources().getString(R.string.delete_question))
                     .setMessage(getResources().getString(R.string.selected_row) + " " + pos)
@@ -49,8 +53,9 @@ public class MainActivity extends AppCompatActivity {
                         items.remove(pos);
                         adapter.notifyDataSetChanged();
                     })
-                    .setNegativeButton(getResources().getString(R.string.no), (click, arg) -> {})
-                    .setView(getLayoutInflater().inflate(R.layout.todo_layout, null))
+                    .setNegativeButton(getResources().getString(R.string.no), (click, arg) -> {
+                    })
+                    .setView(inflate)
                     .create().show();
             return true;
         });
@@ -84,17 +89,17 @@ public class MainActivity extends AppCompatActivity {
             }
 
             TextView textView = newView.findViewById(R.id.todoItem);
-            textView.setText( getItem(position).toString() );
+            textView.setText(((ToDoItem) getItem(position)).getText());
 
-//            if(urgentSwitch.isActivated()) {
-//                newView.setBackgroundColor(Color.RED);
-//                textView.setTextColor(Color.WHITE);
-//            }
+            if (((ToDoItem) getItem(position)).isUrgent()) {
+                textView.setBackgroundColor(Color.RED);
+                textView.setTextColor(Color.WHITE);
+            } else {
+                textView.setBackgroundColor(Color.WHITE);
+                textView.setTextColor(Color.BLACK);
+            }
 
-//                Switch urgentSwitch = findViewById(R.id.urgentSwitch);
-
-
-                return newView;
+            return newView;
         }
     }
 }
