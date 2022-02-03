@@ -1,22 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello_world">Bonjour le monde</string>
-    <string name="button_text">Je suis un bouton!</string>
-    <string name="love_android">J\'aime Android</string>
-    <string name="on_off_switch">Allumer éteindre</string>
-    <string name="press_me">Presse-moi</string>
-    <string name="checkbox">Regardez ça!</string>
-    <string name="toast_message">Le libellé a été mis à jour.</string>
-    <string name="snackbar_message">La case à cocher est\ </string>
-    <string name="on">Activée</string>
-    <string name="off">Désactivée</string>
-    <string name="undo">Annuler</string>
-    <string name="enter_name">Entrez votre nom</string>
-    <string name="next">Suivant</string>
-    <string name="welcome">Bienvenue!</string>
-    <string name="wrong_name">Ne m\'appelle pas comme ça</string>
-    <string name="thank_you">Merci</string>
     <string name="type_here">Écrivez ici</string>
     <string name="urgent">Urgente</string>
     <string name="add">Ajouter</string>
+    <string name="delete_question">Voulez-vous supprimer ceci?</string>
+    <string name="selected_row">La ligne sélectionnée est</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
 </resources>

@@ -43,13 +43,13 @@ public class MainActivity extends AppCompatActivity {
 
         listView.setOnItemLongClickListener((p, b, pos, id) -> {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setTitle("Do you want to delete this?")
-                    .setMessage("The selected row is " + pos)
-                    .setPositiveButton("Yes", (click, arg) -> {
+            alertDialogBuilder.setTitle(getResources().getString(R.string.delete_question))
+                    .setMessage(getResources().getString(R.string.selected_row) + " " + pos)
+                    .setPositiveButton(getResources().getString(R.string.yes), (click, arg) -> {
                         items.remove(pos);
                         adapter.notifyDataSetChanged();
                     })
-                    .setNegativeButton("No", (click, arg) -> {})
+                    .setNegativeButton(getResources().getString(R.string.no), (click, arg) -> {})
                     .setView(getLayoutInflater().inflate(R.layout.todo_layout, null))
                     .create().show();
             return true;
@@ -86,7 +86,15 @@ public class MainActivity extends AppCompatActivity {
             TextView textView = newView.findViewById(R.id.todoItem);
             textView.setText( getItem(position).toString() );
 
-            return newView;
+//            if(urgentSwitch.isActivated()) {
+//                newView.setBackgroundColor(Color.RED);
+//                textView.setTextColor(Color.WHITE);
+//            }
+
+//                Switch urgentSwitch = findViewById(R.id.urgentSwitch);
+
+
+                return newView;
         }
     }
 }
