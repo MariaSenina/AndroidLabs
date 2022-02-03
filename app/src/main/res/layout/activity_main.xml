@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <ListView
-        android:id="@+id/theListView"
+        android:id="@+id/todoListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <LinearLayout
@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent">
         <EditText
-            android:id="@+id/typeHere"
+            android:id="@+id/todoEntry"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
