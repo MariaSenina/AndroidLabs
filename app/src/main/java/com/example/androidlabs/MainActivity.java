@@ -9,7 +9,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
-import android.database.SQLException;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -22,7 +22,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -38,8 +37,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        CustomOpener dbOpener = new CustomOpener(this);
-        sqLiteDatabase = dbOpener.getWritableDatabase();
+        loadItemsFromDatabase();
 
         ListView listView = findViewById(R.id.todoListView);
 
@@ -52,7 +50,17 @@ public class MainActivity extends AppCompatActivity {
             EditText todoEntry = findViewById(R.id.todoEntry);
             newItem = new ToDoItem(todoEntry.getText().toString(), urgentSwitch.isChecked());
             items.add(newItem);
-            addNewItemToDatabase();
+
+            // Add new to-do item to the database
+            ContentValues newRowValues = new ContentValues();
+            newRowValues.put(COL_TODO_ITEM, newItem.getText());
+            if (newItem.isUrgent()) {
+                newRowValues.put(COL_URGENT, TRUE);
+            } else {
+                newRowValues.put(COL_URGENT, FALSE);
+            }
+            long id = sqLiteDatabase.insert(TABLE_NAME, null, newRowValues);
+
             todoEntry.setText("");
             urgentSwitch.setChecked(false);
             adapter.notifyDataSetChanged();
@@ -78,16 +86,27 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void addNewItemToDatabase() {
-        ContentValues newRowValues = new ContentValues();
-        newRowValues.put(COL_TODO_ITEM, newItem.getText());
-        if (newItem.isUrgent()) {
-            newRowValues.put(CustomOpener.COL_URGENT, TRUE);
-        } else {
-            newRowValues.put(CustomOpener.COL_URGENT, FALSE);
-        }
+    private void loadItemsFromDatabase() {
+        CustomOpener dbOpener = new CustomOpener(this);
+        sqLiteDatabase = dbOpener.getWritableDatabase();
 
-        long id = sqLiteDatabase.insert(TABLE_NAME, null, newRowValues);
+        //get all rows from the to-do-list table
+        Cursor todoList = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+
+        int todoItemIndex = todoList.getColumnIndex(COL_TODO_ITEM);
+        int urgentIndex = todoList.getColumnIndex(COL_URGENT);
+
+        // iterate over the results
+        while (todoList.moveToNext()) {
+            String todoItem = todoList.getString(todoItemIndex);
+            boolean urgent = false;
+            if (todoList.getInt(urgentIndex) == 1) {
+                urgent = true;
+            }
+
+            // add retrieved item to the ArrayList for displaying
+            items.add(new ToDoItem(todoItem, urgent));
+        }
     }
 
     private class CustomListAdapter extends BaseAdapter {
