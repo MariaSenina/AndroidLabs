@@ -24,6 +24,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
     private ArrayList<ToDoItem> items = new ArrayList();
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private final static int FALSE = 0;
     SQLiteDatabase sqLiteDatabase;
     ToDoItem newItem;
+    Cursor todoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         loadItemsFromDatabase();
+        printCursor(todoList);
 
         ListView listView = findViewById(R.id.todoListView);
 
@@ -98,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         sqLiteDatabase = dbOpener.getWritableDatabase();
 
         //get all rows from the to-do-list table
-        Cursor todoList = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+        todoList = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME, null);
 
         int todoItemIndex = todoList.getColumnIndex(COL_TODO_ITEM);
         int urgentIndex = todoList.getColumnIndex(COL_URGENT);
@@ -116,6 +119,23 @@ public class MainActivity extends AppCompatActivity {
             // add retrieved item to the ArrayList for displaying
             items.add(new ToDoItem(todoItem, urgent, id));
         }
+    }
+
+    private void printCursor(Cursor c) {
+        // db version
+        System.out.println("DB version: " + sqLiteDatabase.getVersion());
+
+        // number of columns
+        System.out.println("Column count: " + c.getColumnCount());
+
+        // names of the columns
+        System.out.println("Column names: " + Arrays.toString(c.getColumnNames()));
+
+        // number of results in the cursor
+        System.out.println("Number of rows: " + c.getCount());
+
+        // all rows in the cursor
+        System.out.println("Row contents: \n" + items.toString());
     }
 
     private class CustomListAdapter extends BaseAdapter {
