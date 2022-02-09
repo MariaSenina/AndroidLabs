@@ -1,9 +1,15 @@
 package com.example.androidlabs;
 
+import static com.example.androidlabs.CustomOpener.COL_ID;
+import static com.example.androidlabs.CustomOpener.COL_TODO_ITEM;
+import static com.example.androidlabs.CustomOpener.COL_URGENT;
+import static com.example.androidlabs.CustomOpener.TABLE_NAME;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -73,13 +80,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void addNewItemToDatabase() {
         ContentValues newRowValues = new ContentValues();
-        newRowValues.put(CustomOpener.COL_TODO_ITEM, newItem.getText());
+        newRowValues.put(COL_TODO_ITEM, newItem.getText());
         if (newItem.isUrgent()) {
             newRowValues.put(CustomOpener.COL_URGENT, TRUE);
         } else {
             newRowValues.put(CustomOpener.COL_URGENT, FALSE);
         }
-        long id = sqLiteDatabase.insert(CustomOpener.TABLE_NAME, null, newRowValues);
+
+        long id = sqLiteDatabase.insert(TABLE_NAME, null, newRowValues);
     }
 
     private class CustomListAdapter extends BaseAdapter {

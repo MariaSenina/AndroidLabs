@@ -21,8 +21,8 @@ public class CustomOpener extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE " + TABLE_NAME + " (" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + COL_TODO_ITEM + " TEXT,"
-                + COL_URGENT + "TEXT);");
+                + COL_TODO_ITEM + " TEXT, "
+                + COL_URGENT + " INTEGER);");
     }
 
     @Override
