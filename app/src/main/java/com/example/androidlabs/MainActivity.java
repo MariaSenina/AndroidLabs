@@ -25,21 +25,22 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private ArrayList<ToDoItem> items = new ArrayList();
+    private List<ToDoItem> items;
     private final static int TRUE = 1;
     private final static int FALSE = 0;
-    SQLiteDatabase sqLiteDatabase;
-    ToDoItem newItem;
-    Cursor todoList;
+    private SQLiteDatabase sqLiteDatabase;
+    private ToDoItem newItem;
+    private Cursor todoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loadItemsFromDatabase();
+        items = loadItemsFromDatabase();
         printCursor(todoList);
 
         ListView listView = findViewById(R.id.todoListView);
@@ -96,8 +97,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void loadItemsFromDatabase() {
+    private List<ToDoItem> loadItemsFromDatabase() {
         CustomOpener dbOpener = new CustomOpener(this);
+        ArrayList<ToDoItem> retrievedItems = new ArrayList();
         sqLiteDatabase = dbOpener.getWritableDatabase();
 
         //get all rows from the to-do-list table
@@ -117,8 +119,10 @@ public class MainActivity extends AppCompatActivity {
             long id = todoList.getLong(idIndex);
 
             // add retrieved item to the ArrayList for displaying
-            items.add(new ToDoItem(todoItem, urgent, id));
+            retrievedItems.add(new ToDoItem(todoItem, urgent, id));
         }
+
+        return retrievedItems;
     }
 
     private void printCursor(Cursor c) {
