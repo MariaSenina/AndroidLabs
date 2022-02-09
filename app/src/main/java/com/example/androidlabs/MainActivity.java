@@ -48,21 +48,27 @@ public class MainActivity extends AppCompatActivity {
         addButton.setOnClickListener(click -> {
             Switch urgentSwitch = findViewById(R.id.urgentSwitch);
             EditText todoEntry = findViewById(R.id.todoEntry);
-            newItem = new ToDoItem(todoEntry.getText().toString(), urgentSwitch.isChecked());
-            items.add(newItem);
+            String todoItem = todoEntry.getText().toString();
+            boolean urgent = urgentSwitch.isChecked();
 
             // Add new to-do item to the database
             ContentValues newRowValues = new ContentValues();
-            newRowValues.put(COL_TODO_ITEM, newItem.getText());
-            if (newItem.isUrgent()) {
+            newRowValues.put(COL_TODO_ITEM, todoItem);
+            if (urgent) {
                 newRowValues.put(COL_URGENT, TRUE);
             } else {
                 newRowValues.put(COL_URGENT, FALSE);
             }
             long id = sqLiteDatabase.insert(TABLE_NAME, null, newRowValues);
 
+            newItem = new ToDoItem(todoItem, urgent, id);
+            items.add(newItem);
+
+            // reset input area
             todoEntry.setText("");
             urgentSwitch.setChecked(false);
+
+            // notify adapter about change
             adapter.notifyDataSetChanged();
         });
 
@@ -75,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
             alertDialogBuilder.setTitle(getResources().getString(R.string.delete_question))
                     .setMessage(getResources().getString(R.string.selected_row) + " " + pos)
                     .setPositiveButton(getResources().getString(R.string.yes), (click, arg) -> {
+                        sqLiteDatabase.delete(TABLE_NAME, COL_ID + " = " + adapter.getItemId(pos), null);
                         items.remove(pos);
                         adapter.notifyDataSetChanged();
                     })
@@ -95,17 +102,19 @@ public class MainActivity extends AppCompatActivity {
 
         int todoItemIndex = todoList.getColumnIndex(COL_TODO_ITEM);
         int urgentIndex = todoList.getColumnIndex(COL_URGENT);
+        int idIndex = todoList.getColumnIndex(COL_ID);
 
         // iterate over the results
         while (todoList.moveToNext()) {
             String todoItem = todoList.getString(todoItemIndex);
             boolean urgent = false;
-            if (todoList.getInt(urgentIndex) == 1) {
+            if (todoList.getInt(urgentIndex) == TRUE) {
                 urgent = true;
             }
+            long id = todoList.getLong(idIndex);
 
             // add retrieved item to the ArrayList for displaying
-            items.add(new ToDoItem(todoItem, urgent));
+            items.add(new ToDoItem(todoItem, urgent, id));
         }
     }
 
@@ -123,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public long getItemId(int position) {
-            return (long) position;
+            return ((ToDoItem)getItem(position)).getId();
         }
 
         @Override
