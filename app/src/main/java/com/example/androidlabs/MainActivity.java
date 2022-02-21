@@ -29,31 +29,30 @@ public class MainActivity extends AppCompatActivity {
         request.execute("https://cataas.com/cat?json=true");
     }
 
-    class CatImages extends AsyncTask<String, Integer, String> {
+    private class CatImages extends AsyncTask<String, Integer, String> {
 
         @Override
         protected String doInBackground(String... args) {
 
-//            try {
-//                URL url = new URL(args[0]);
-//                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-//                InputStream response = urlConnection.getInputStream();
-//
-//                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response, "UTF-8"), 8);
-//                StringBuilder stringBuilder = new StringBuilder();
-//                String line = null;
-//                while ((line = bufferedReader.readLine()) != null) {
-//                    stringBuilder.append(line + "\n");
-//                }
-//
-//                String result = stringBuilder.toString();
-//
-//                JSONObject catImage = new JSONObject(result);
-//
-//                Bitmap currentPicture = BitmapFactory.decodeStream(response);
-//            } catch (IOException | JSONException e) {
-//                e.printStackTrace();
-//            }
+            try {
+                URL url = new URL(args[0]);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                InputStream response = urlConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response, "UTF-8"), 8);
+                StringBuilder stringBuilder = new StringBuilder();
+                String line = null;
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(line + "\n");
+                }
+
+                String result = stringBuilder.toString();
+
+                JSONObject catImage = new JSONObject(result);
+
+                Bitmap currentPicture = BitmapFactory.decodeStream(response);
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            }
 
             return null;
         }
