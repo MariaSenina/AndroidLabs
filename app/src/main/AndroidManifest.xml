@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidLabs"
-        android:banner="@drawable/test">
+        android:banner="@drawable/cats_app">
         <activity
             android:name=".MainActivity"
             android:exported="true">
