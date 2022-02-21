@@ -12,13 +12,18 @@ import android.widget.ImageView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Collection;
 
 public class MainActivity extends AppCompatActivity {
     private ImageView imageView;
@@ -64,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
                 JSONObject catImage = new JSONObject(result);
                 String imageUrl = catImage.getString("url");
+                String imageId = catImage.getString("id");
 
                 // Send second request for cat image
                 url = new URL(DOMAIN + imageUrl);
@@ -71,6 +77,11 @@ public class MainActivity extends AppCompatActivity {
                 response = urlConnection.getInputStream();
 
                 Bitmap currentPicture = BitmapFactory.decodeStream(response);
+
+                File file = new File(context.getFilesDir(), imageId);
+                output = new BufferedOutputStream(new FileOutputStream(file));
+                currentPicture.compress(Bitmap.CompressFormat.JPEG, 100, output);
+                output.close();
 
                 ((MainActivity)context).runOnUiThread(() -> imageView.setImageBitmap(currentPicture));
             } catch (IOException | JSONException e) {
