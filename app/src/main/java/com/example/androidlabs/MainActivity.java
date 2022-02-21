@@ -49,46 +49,51 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... args) {
-            InputStream response = null;
-            OutputStream output = null;
-            try {
-                // Send first Web request
-                URL url = new URL(args[0]);
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                response = urlConnection.getInputStream();
+            while(true) {
+                try {
+                    // Send first Web request
+                    URL url = new URL(args[0]);
+                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                    InputStream response = urlConnection.getInputStream();
 
-                // Read JSON
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response, "UTF-8"), 8);
-                StringBuilder stringBuilder = new StringBuilder();
-                String line = null;
-                while ((line = bufferedReader.readLine()) != null) {
-                    stringBuilder.append(line + "\n");
+                    // Read JSON
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response, "UTF-8"), 8);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String line = null;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        stringBuilder.append(line + "\n");
+                    }
+
+                    String result = stringBuilder.toString();
+
+                    JSONObject catImage = new JSONObject(result);
+                    String imageUrl = catImage.getString("url");
+                    String imageId = catImage.getString("id");
+
+                    // Send second request for cat image
+                    url = new URL(DOMAIN + imageUrl);
+                    urlConnection = (HttpURLConnection) url.openConnection();
+                    response = urlConnection.getInputStream();
+
+                    Bitmap currentPicture = BitmapFactory.decodeStream(response);
+
+                    File file = new File(context.getFilesDir(), imageId);
+                    if (!file.exists()) {
+                        OutputStream output = new BufferedOutputStream(new FileOutputStream(file));
+                        currentPicture.compress(Bitmap.CompressFormat.JPEG, 100, output);
+                        output.close();
+                    }
+
+                    ((MainActivity) context).runOnUiThread(() -> imageView.setImageBitmap(currentPicture));
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
                 }
-
-                String result = stringBuilder.toString();
-
-                JSONObject catImage = new JSONObject(result);
-                String imageUrl = catImage.getString("url");
-                String imageId = catImage.getString("id");
-
-                // Send second request for cat image
-                url = new URL(DOMAIN + imageUrl);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                response = urlConnection.getInputStream();
-
-                Bitmap currentPicture = BitmapFactory.decodeStream(response);
-
-                File file = new File(context.getFilesDir(), imageId);
-                output = new BufferedOutputStream(new FileOutputStream(file));
-                currentPicture.compress(Bitmap.CompressFormat.JPEG, 100, output);
-                output.close();
-
-                ((MainActivity)context).runOnUiThread(() -> imageView.setImageBitmap(currentPicture));
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
+                try {
+                    Thread.sleep(2000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-
-            return null;
         }
     }
 }
