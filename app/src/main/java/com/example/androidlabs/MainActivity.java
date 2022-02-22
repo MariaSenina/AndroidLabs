@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +28,7 @@ import java.util.Collection;
 
 public class MainActivity extends AppCompatActivity {
     private ImageView imageView;
+    private ProgressBar progressBar;
 
     private static final String DOMAIN = "https://cataas.com";
 
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         imageView = findViewById(R.id.imageView);
+        progressBar = findViewById(R.id.progressBar);
 
         CatImages request = new CatImages(MainActivity.this);
         request.execute(DOMAIN + "/cat?json=true");
@@ -42,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
     private class CatImages extends AsyncTask<String, Integer, String> {
         private Context context;
+        private Bitmap currentPicture;
+        boolean newImageSelected;
 
         public CatImages(Context context) {
             this.context = context;
@@ -71,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                     String imageId = catImage.getString("id");
 
                     File file = new File(context.getFilesDir(), imageId);
-                    Bitmap currentPicture;
+
                     if (!file.exists()) {
                         // Send second request for cat image
                         url = new URL(DOMAIN + imageUrl);
@@ -87,16 +92,30 @@ public class MainActivity extends AppCompatActivity {
                         currentPicture = BitmapFactory.decodeFile(file.getPath());
                     }
 
-                    ((MainActivity) context).runOnUiThread(() -> imageView.setImageBitmap(currentPicture));
+                    newImageSelected = true;
+                    for (int i = 0; i < 100; i++) {
+                        try {
+                            publishProgress(i);
+                            Thread.sleep(20);
+                            newImageSelected = false;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
                 }
-                try {
-                    Thread.sleep(2000);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            if (newImageSelected) {
+                imageView.setImageBitmap(currentPicture);
+            }
+
+            progressBar.setProgress(values[0]);
         }
     }
 }
