@@ -70,18 +70,21 @@ public class MainActivity extends AppCompatActivity {
                     String imageUrl = catImage.getString("url");
                     String imageId = catImage.getString("id");
 
-                    // Send second request for cat image
-                    url = new URL(DOMAIN + imageUrl);
-                    urlConnection = (HttpURLConnection) url.openConnection();
-                    response = urlConnection.getInputStream();
-
-                    Bitmap currentPicture = BitmapFactory.decodeStream(response);
-
                     File file = new File(context.getFilesDir(), imageId);
+                    Bitmap currentPicture;
                     if (!file.exists()) {
+                        // Send second request for cat image
+                        url = new URL(DOMAIN + imageUrl);
+                        urlConnection = (HttpURLConnection) url.openConnection();
+                        response = urlConnection.getInputStream();
+
+                        currentPicture = BitmapFactory.decodeStream(response);
+
                         OutputStream output = new BufferedOutputStream(new FileOutputStream(file));
                         currentPicture.compress(Bitmap.CompressFormat.JPEG, 100, output);
                         output.close();
+                    } else {
+                        currentPicture = BitmapFactory.decodeFile(file.getPath());
                     }
 
                     ((MainActivity) context).runOnUiThread(() -> imageView.setImageBitmap(currentPicture));
