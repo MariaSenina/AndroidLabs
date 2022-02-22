@@ -23,8 +23,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Collection;
 
 public class MainActivity extends AppCompatActivity {
     private ImageView imageView;
@@ -46,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private class CatImages extends AsyncTask<String, Integer, String> {
         private Context context;
         private Bitmap currentPicture;
-        boolean newImageSelected;
+        private boolean newImageSelected;
 
         public CatImages(Context context) {
             this.context = context;
@@ -57,19 +55,10 @@ public class MainActivity extends AppCompatActivity {
             while(true) {
                 try {
                     // Send first Web request
-                    URL url = new URL(args[0]);
-                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                    InputStream response = urlConnection.getInputStream();
+                    InputStream response = makeHttpRequest(args[0]);
 
                     // Read JSON
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response, "UTF-8"), 8);
-                    StringBuilder stringBuilder = new StringBuilder();
-                    String line = null;
-                    while ((line = bufferedReader.readLine()) != null) {
-                        stringBuilder.append(line + "\n");
-                    }
-
-                    String result = stringBuilder.toString();
+                    String result = parseJson(response);
 
                     JSONObject catImage = new JSONObject(result);
                     String imageUrl = catImage.getString("url");
@@ -77,19 +66,16 @@ public class MainActivity extends AppCompatActivity {
 
                     File file = new File(context.getFilesDir(), imageId);
 
-                    if (!file.exists()) {
-                        // Send second request for cat image
-                        url = new URL(DOMAIN + imageUrl);
-                        urlConnection = (HttpURLConnection) url.openConnection();
-                        response = urlConnection.getInputStream();
+                    if (file.exists()) {
+                        currentPicture = BitmapFactory.decodeFile(file.getPath());
+                    } else {
+                        response = makeHttpRequest(DOMAIN + imageUrl);
 
                         currentPicture = BitmapFactory.decodeStream(response);
 
                         OutputStream output = new BufferedOutputStream(new FileOutputStream(file));
                         currentPicture.compress(Bitmap.CompressFormat.JPEG, 100, output);
                         output.close();
-                    } else {
-                        currentPicture = BitmapFactory.decodeFile(file.getPath());
                     }
 
                     newImageSelected = true;
@@ -116,6 +102,23 @@ public class MainActivity extends AppCompatActivity {
             }
 
             progressBar.setProgress(values[0]);
+        }
+
+        protected InputStream makeHttpRequest(String address) throws IOException {
+            URL url = new URL(address);
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            return urlConnection.getInputStream();
+        }
+
+        protected String parseJson(InputStream response) throws IOException {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response, "UTF-8"), 8);
+            StringBuilder stringBuilder = new StringBuilder();
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line + "\n");
+            }
+
+            return stringBuilder.toString();
         }
     }
 }
