@@ -16,7 +16,7 @@
             android:textStyle="bold"
             android:text="@string/name"/>
         <TextView
-            android:id="@+id/fillMePlaceholder"
+            android:id="@+id/namePlaceholder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20dp"
@@ -32,14 +32,14 @@
             android:text="@string/height"
             android:layout_below="@id/nameText"/>
         <TextView
-            android:id="@+id/fillMePlaceholder2"
+            android:id="@+id/heightPlaceholder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:textStyle="bold"
             android:text="@string/fill_me"
             android:layout_toRightOf="@id/heightText"
-            android:layout_below="@id/fillMePlaceholder"/>
+            android:layout_below="@id/namePlaceholder"/>
         <TextView
             android:id="@+id/massText"
             android:layout_width="wrap_content"
@@ -49,14 +49,14 @@
             android:text="@string/mass"
             android:layout_below="@id/heightText"/>
         <TextView
-            android:id="@+id/fillMePlaceholder3"
+            android:id="@+id/massPlaceholder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:textStyle="bold"
             android:text="@string/fill_me"
             android:layout_toRightOf="@id/massText"
-            android:layout_below="@id/fillMePlaceholder2"/>
+            android:layout_below="@id/heightPlaceholder"/>
     </RelativeLayout>
 
 </FrameLayout>

@@ -7,7 +7,7 @@
     <string name="selected_row">La ligne sélectionnée est</string>
     <string name="yes">Oui</string>
     <string name="no">Non</string>
-    <string name="name">Nom:</string>
-    <string name="height">Taille:</string>
-    <string name="mass">Masse:</string>
+    <string name="name">Nom: </string>
+    <string name="height">Taille: </string>
+    <string name="mass">Masse: </string>
 </resources>
