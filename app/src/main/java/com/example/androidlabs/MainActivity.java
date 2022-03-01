@@ -5,12 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,11 +37,32 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        listView = findViewById(R.id.listView);
 
         boolean isTablet = findViewById(R.id.fragment) != null;
 
         StarWarsApiConsumer request = new StarWarsApiConsumer();
         request.execute(BASE_URL + "people/?format=json");
+
+        listView.setOnItemClickListener((list, item, position, id) -> {
+            Bundle dataToSend = new Bundle();
+            dataToSend.putString(NAME, characters.get(position).getName());
+            dataToSend.putString(HEIGHT, characters.get(position).getHeight());
+            dataToSend.putString(MASS, characters.get(position).getMass());
+
+            if(isTablet) {
+                DetailsFragment detailFragment = new DetailsFragment();
+                detailFragment.setArguments(dataToSend);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment, detailFragment)
+                        .commit();
+            } else {
+                Intent nextActivity = new Intent(MainActivity.this, EmptyActivity.class);
+                nextActivity.putExtras(dataToSend);
+                startActivity(nextActivity);
+            }
+        });
     }
 
     private class StarWarsApiConsumer extends AsyncTask <String, Integer, Map<String, SWCharacter>> {
@@ -79,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Map<String, SWCharacter> characterMap) {
-            listView = findViewById(R.id.listView);
             adapter = new CustomListAdapter(MainActivity.this, characters);
             listView.setAdapter(adapter);
         }

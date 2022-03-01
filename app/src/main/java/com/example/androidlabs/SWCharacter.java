@@ -2,13 +2,13 @@ package com.example.androidlabs;
 
 public class SWCharacter {
     private String name;
-    private String age;
+    private String height;
     private String mass;
     private long id;
 
-    public SWCharacter(String name, String age, String mass, int id) {
+    public SWCharacter(String name, String height, String mass, int id) {
         this.name = name;
-        this.age = age;
+        this.height = height;
         this.mass = mass;
         this.id = (long) id;
     }
@@ -21,12 +21,12 @@ public class SWCharacter {
         this.name = name;
     }
 
-    public String getAge() {
-        return age;
+    public String getHeight() {
+        return height;
     }
 
-    public void setAge(String age) {
-        this.age = age;
+    public void setHeight(String height) {
+        this.height = height;
     }
 
     public String getMass() {
@@ -49,7 +49,7 @@ public class SWCharacter {
     public String toString() {
         return "SWCharacter{" +
                 "name='" + name + '\'' +
-                ", age='" + age + '\'' +
+                ", height='" + height + '\'' +
                 ", mass='" + mass + '\'' +
                 '}';
     }
