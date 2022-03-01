@@ -5,8 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,8 +23,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,42 +32,21 @@ public class MainActivity extends AppCompatActivity {
     public static final String HEIGHT = "height";
     public static final String MASS = "mass";
     public static final String BASE_URL = "https://swapi.dev/api/";
-    ArrayAdapter<String> theAdapter;
 
-    ArrayList<String> source = new ArrayList<>(Arrays.asList("One", "Two", "Three", "Four"));
+    private List<SWCharacter> characters = new ArrayList<>();
+    private CustomListAdapter adapter;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ListView listView = findViewById(R.id.listView);
+
         boolean isTablet = findViewById(R.id.fragment) != null;
 
         StarWarsApiConsumer request = new StarWarsApiConsumer();
         request.execute(BASE_URL + "people/?format=json");
-
-        theAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, source);
-        listView.setAdapter(theAdapter);
-        listView.setOnItemClickListener((list, item, position, id) -> {
-            Bundle dataToSend = new Bundle();
-            dataToSend.putString(NAME, source.get(position));
-            dataToSend.putString(HEIGHT, "123");
-            dataToSend.putString(MASS, "11");
-
-            if(isTablet) {
-                DetailsFragment detailFragment = new DetailsFragment();
-                detailFragment.setArguments(dataToSend);
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment, detailFragment)
-                        .commit();
-            } else {
-                Intent nextActivity = new Intent(MainActivity.this, EmptyActivity.class);
-                nextActivity.putExtras(dataToSend);
-                startActivity(nextActivity);
-            }
-        });
     }
 
     private class StarWarsApiConsumer extends AsyncTask <String, Integer, Map<String, SWCharacter>> {
@@ -81,14 +64,24 @@ public class MainActivity extends AppCompatActivity {
                     String height = characters.getJSONObject(i).getString(HEIGHT);
                     String mass = characters.getJSONObject(i).getString(MASS);
 
-                    SWCharacter character = new SWCharacter(name, height, mass);
+                    SWCharacter character = new SWCharacter(name, height, mass, i);
                     characterMap.put(name, character);
+
+                    MainActivity.this.characters.add(character);
+                    publishProgress(i);
                 }
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
 
             return characterMap;
+        }
+
+        @Override
+        protected void onPostExecute(Map<String, SWCharacter> characterMap) {
+            listView = findViewById(R.id.listView);
+            adapter = new CustomListAdapter(MainActivity.this, characters);
+            listView.setAdapter(adapter);
         }
 
         protected InputStream makeHttpRequest(String address) throws IOException {

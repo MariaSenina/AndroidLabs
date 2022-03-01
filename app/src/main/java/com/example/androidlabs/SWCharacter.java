@@ -4,11 +4,13 @@ public class SWCharacter {
     private String name;
     private String age;
     private String mass;
+    private long id;
 
-    public SWCharacter(String name, String age, String mass) {
+    public SWCharacter(String name, String age, String mass, int id) {
         this.name = name;
         this.age = age;
         this.mass = mass;
+        this.id = (long) id;
     }
 
     public String getName() {
@@ -33,6 +35,14 @@ public class SWCharacter {
 
     public void setMass(String mass) {
         this.mass = mass;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     @Override
