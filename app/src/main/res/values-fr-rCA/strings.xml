@@ -2,5 +2,9 @@
 <resources>
     <string name="type_here">Écrivez ici</string>
     <string name="cart">Panier</string>
-    <string name="help">Assistance</string>
+    <string name="home">Maison</string>
+    <string name="DadJoke">BlagueDePapa</string>
+    <string name="exit">Sortie</string>
+    <string name="open">Ouvrir</string>
+    <string name="close">Fermer</string>
 </resources>

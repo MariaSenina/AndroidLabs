@@ -2,6 +2,10 @@
     <string name="app_name" translatable="false">CST2335 Lab 8</string>
     <string name="type_here">Type Here</string>
     <string name="email" translatable="false">Email</string>
+    <string name="home">Home</string>
     <string name="cart">Cart</string>
-    <string name="help">Help</string>
+    <string name="DadJoke">DadJoke</string>
+    <string name="exit">Exit</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
 </resources>

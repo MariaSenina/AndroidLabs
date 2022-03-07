@@ -14,10 +14,4 @@
         android:icon="@drawable/cart_icon"
         android:orderInCategory="2"
         app:showAsAction="always"/>
-
-    <item android:id="@+id/helpOption"
-        android:title="@string/help"
-        android:icon="@drawable/help_icon"
-        android:orderInCategory="3"
-        app:showAsAction="never"/>
 </menu>
