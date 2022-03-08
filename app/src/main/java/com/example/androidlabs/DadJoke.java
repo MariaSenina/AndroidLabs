@@ -1,24 +1,18 @@
 package com.example.androidlabs;
 
-import androidx.fragment.app.Fragment;
-
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class DadJoke extends Fragment {
+public class DadJoke extends ActivityHeaderCreator {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_dad_joke);
 
-        View newView = inflater.inflate(R.layout.activity_dad_joke, container, false);
+        createActivityHeader();
 
-        TextView dadJoke = newView.findViewById(R.id.dadJoke);
+        TextView dadJoke = findViewById(R.id.dadJoke);
         dadJoke.setText("How do celebrities stay cool? They have many fans.");
-
-        return newView;
     }
 }

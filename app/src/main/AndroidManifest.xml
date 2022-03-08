@@ -15,6 +15,9 @@
             android:name=".DadJoke"
             android:exported="false" />
         <activity
+            android:name=".DadJoke"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
